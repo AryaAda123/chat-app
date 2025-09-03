@@ -1,42 +1,53 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Chat app using Socket IO and Node JS</title>
+    <title>Chat with Vishal</title>
     <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <style>
+        body {
+            background-color: #1a202c; /* A dark gray background */
+            color: #e2e8f0; /* Light text color */
+        }
+        .message-area-container {
+            max-height: 400px; /* Optional: Sets a max height for the chat area */
+            overflow-y: auto; /* Optional: Adds a scrollbar when content overflows */
+        }
+        .chat-message {
+            background-color: #2d3748; /* A darker shade for message bubbles */
+            padding: 10px;
+            margin: 5px;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 
 <body>
-    <h1 class="font-bold text-green-500 
-               text-3xl text-center mt-5">
-          GeeksforGeeks
-      </h1>
-    <div>
-        <h2 class="font-semibold text-xl 
-                   text-center mt-5" 
-            id="logo">
-              Chat App using Socket io
-          </h2>
+    <div class="container mx-auto p-4">
+        <h1 class="font-extrabold text-blue-400 text-5xl text-center mt-8">
+            Chat with Vishal
+        </h1>
+        <h2 class="font-semibold text-xl text-center text-purple-400 mt-2">
+            Real-Time Chat Application
+        </h2>
     </div>
-    <form class="flex flex-col justify-center 
-                 items-center mt-5" 
-          id="form">
-        <input class="border border-gray-400 
-                      rounded-md mt-5 p-1" 
-               type="text" 
-               placeholder="Name" 
-               id="myname">
-        <input class="border border-gray-400 
-                      rounded-md mt-5 p-1" 
-               type="text" 
-               placeholder="Message" 
-               id="message">
-        <button class="bg-blue-500 rounded-md p-2 
-                       text-white mt-5">
-              Send
-          </button>
+
+    <form class="flex flex-col justify-center items-center mt-5" id="form">
+        <input class="border border-gray-600 bg-gray-700 text-white rounded-md mt-5 p-2 w-full max-w-sm"
+            type="text"
+            placeholder="Name"
+            id="myname">
+        <input class="border border-gray-600 bg-gray-700 text-white rounded-md mt-5 p-2 w-full max-w-sm"
+            type="text"
+            placeholder="Message"
+            id="message">
+        <button class="bg-purple-500 hover:bg-purple-600 transition-colors duration-300 rounded-md p-2 text-white mt-5 w-full max-w-sm">
+            Send
+        </button>
     </form>
-    <div class="flex flex-col justify-center 
-                items-center mt-5" 
-         id="messageArea">
+
+    <div class="flex flex-col justify-center items-center mt-5 message-area-container">
+        <div id="messageArea" class="w-full max-w-2xl">
+        </div>
     </div>
 </body>
 <script src="/socket.io/socket.io.js"></script>
@@ -46,6 +57,7 @@
     let myname = document.getElementById('myname');
     let message = document.getElementById('message');
     let messageArea = document.getElementById("messageArea");
+
     form.addEventListener("submit", (e) => {
         e.preventDefault();
         if (message.value) {
@@ -54,17 +66,20 @@
             message.value = "";
         }
     });
+
     socket.on("send name", (username) => {
         let name = document.createElement("p");
-        name.style.backgroundColor = "grey";
+        name.style.backgroundColor = "transparent";
         name.style.width = "100%";
         name.style.textAlign = "center";
-        name.style.color = "white";
+        name.style.color = "#e2e8f0";
         name.textContent = username + ":";
         messageArea.appendChild(name);
     });
+
     socket.on("send message", (chat) => {
         let chatContent = document.createElement("p");
+        chatContent.classList.add("chat-message");
         chatContent.textContent = chat;
         messageArea.appendChild(chatContent);
     });
